@@ -76,6 +76,7 @@ class MethodChannelNativeCrypto extends NativeCryptoPlatform {
   Future<List<Uint8List>?> encryptAsList(
     Uint8List data,
     Uint8List key,
+    Uint8List? iv,
     String algorithm,
   ) async {
     try {
@@ -84,6 +85,7 @@ class MethodChannelNativeCrypto extends NativeCryptoPlatform {
         <String, dynamic>{
           'data': data,
           'key': key,
+          'iv': iv,
           'algorithm': algorithm,
         },
       );

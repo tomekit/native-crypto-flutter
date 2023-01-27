@@ -61,6 +61,7 @@ abstract class NativeCryptoPlatform extends PlatformInterface {
   Future<List<Uint8List>?> encryptAsList(
     Uint8List data,
     Uint8List key,
+    Uint8List? iv,
     String algorithm,
   ) {
     throw UnimplementedError('encryptAsList is not implemented');

@@ -22,17 +22,25 @@ class AES : Cipher {
     // native.crypto cipherText representation = [NONCE(12) || CIPHERTEXT(n-28) || TAG(16)]
     // javax.crypto cipherText representation = [NONCE(12)] + [CIPHERTEXT(n-16) || TAG(16)]
     override fun encrypt(data: ByteArray, key: ByteArray): ByteArray {
-        val list : List<ByteArray> = encryptAsList(data, key)
+        val list : List<ByteArray> = encryptAsList(data, key, null)
         return list.first().plus(list.last())
     }
 
     // native.crypto cipherText representation = [NONCE(12)] + [CIPHERTEXT(n-16) || TAG(16)]
     // javax.crypto cipherText representation = [NONCE(12)] + [CIPHERTEXT(n-16) || TAG(16)]
-    override fun encryptAsList(data: ByteArray, key: ByteArray): List<ByteArray> {
+    override fun encryptAsList(data: ByteArray, key: ByteArray, ivParam : ByteArray?): List<ByteArray> {
         val sk = SecretKeySpec(key, "AES")
         lazyLoadCipher()
-        cipherInstance!!.init(javax.crypto.Cipher.ENCRYPT_MODE, sk)
+
+        if(ivParam != null) {
+            val gcmParameterSpec = GCMParameterSpec(16 * 8, ivParam)
+            cipherInstance!!.init(javax.crypto.Cipher.ENCRYPT_MODE, sk, gcmParameterSpec)
+        } else {
+            cipherInstance!!.init(javax.crypto.Cipher.ENCRYPT_MODE, sk)
+        }
+
         val bytes: ByteArray = cipherInstance!!.doFinal(data)
+
         val iv: ByteArray = cipherInstance!!.iv
         return listOf(iv, bytes)
     }

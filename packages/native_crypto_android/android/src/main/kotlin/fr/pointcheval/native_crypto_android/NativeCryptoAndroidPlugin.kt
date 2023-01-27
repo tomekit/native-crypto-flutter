@@ -113,13 +113,15 @@ class NativeCryptoAndroidPlugin : FlutterPlugin, MethodCallHandler {
             val data: ByteArray =
                 Objects.requireNonNull(arguments?.get(Constants.DATA)) as ByteArray
             val key: ByteArray = Objects.requireNonNull(arguments?.get(Constants.KEY)) as ByteArray
+            val iv: ByteArray =
+                Objects.requireNonNull(arguments?.get(Constants.IV)) as ByteArray
             val algorithm: String =
                 Objects.requireNonNull(arguments?.get(Constants.ALGORITHM)) as String
 
             val cipherAlgorithm: CipherAlgorithm = CipherAlgorithm.valueOf(algorithm)
             lazyLoadCipher(cipherAlgorithm)
 
-            cipherInstance!!.encryptAsList(data, key)
+            cipherInstance!!.encryptAsList(data, key, iv)
         }
     }
 

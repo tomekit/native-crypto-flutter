@@ -51,7 +51,7 @@ class BenchmarkPage extends ConsumerWidget {
 
       // Encryption
       var before = DateTime.now();
-      var encryptedBigFile = await cipher.encrypt(b);
+      var encryptedBigFile = await cipher.encrypt(b, null);
       var after = DateTime.now();
 
       var benchmark =
@@ -99,7 +99,7 @@ class BenchmarkPage extends ConsumerWidget {
       if (usePc) {
         encryptedBigFile = pc.encrypt(b, state.secretKey.bytes);
       } else {
-        encryptedBigFile = await cipher.encrypt(b);
+        encryptedBigFile = await cipher.encrypt(b, null);
       }
       var after = DateTime.now();
 

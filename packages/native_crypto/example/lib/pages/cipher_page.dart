@@ -40,7 +40,7 @@ class CipherPage extends ConsumerWidget {
       encryptionStatus.print('Entry is empty');
     } else {
       var stringToBytes = plainText.toBytes();
-      cipherText = await cipher.encrypt(stringToBytes);
+      cipherText = await cipher.encrypt(stringToBytes, state.iv);
       encryptionStatus.print('String successfully encrypted.\n');
       encryptionStatus.append("Nonce: " +
           cipherText!.iv.toString() +

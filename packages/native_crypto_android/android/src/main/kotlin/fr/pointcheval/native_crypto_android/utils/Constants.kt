@@ -4,6 +4,7 @@ object Constants {
     const val ALGORITHM = "algorithm"
     const val BITS_COUNT = "bitsCount"
     const val DATA = "data"
+    const val IV = "iv"
     const val PASSWORD = "password"
     const val SALT = "salt"
     const val KEY = "key"

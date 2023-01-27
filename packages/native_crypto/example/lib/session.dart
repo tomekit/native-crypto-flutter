@@ -14,10 +14,16 @@ import 'package:native_crypto/native_crypto.dart';
 
 class Session {
   SecretKey secretKey;
+  Uint8List? iv;
+
   Session() : secretKey = SecretKey(Uint8List(0));
 
   void setKey(SecretKey sk) {
     secretKey = sk;
+  }
+
+  void setIv(Uint8List ivParam) {
+    iv = ivParam;
   }
 }
 

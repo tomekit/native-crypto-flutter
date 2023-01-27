@@ -61,9 +61,9 @@ class AES implements Cipher {
         Uint8List(0);
   }
 
-  Future<CipherText> _encrypt(Uint8List data) async {
+  Future<CipherText> _encrypt(Uint8List data, Uint8List? iv) async {
     final List<Uint8List> cipherText =
-        await platform.encryptAsList(data, key.bytes, algorithm.name) ??
+        await platform.encryptAsList(data, key.bytes, iv, algorithm.name) ??
             List.empty();
     return CipherText.fromPairIvAndBytes(
       cipherText,
@@ -87,25 +87,26 @@ class AES implements Cipher {
   }
 
   @override
-  Future<CipherText> encrypt(Uint8List data) async {
-    Uint8List dataToEncrypt;
-
-    final CipherTextList cipherTextList = CipherTextList();
-
-    if (data.length > Cipher.bytesCountPerChunk) {
-      final int chunkNb = (data.length / Cipher.bytesCountPerChunk).ceil();
-      for (var i = 0; i < chunkNb; i++) {
-        dataToEncrypt = i < (chunkNb - 1)
-            ? data.sublist(
-                i * Cipher.bytesCountPerChunk,
-                (i + 1) * Cipher.bytesCountPerChunk,
-              )
-            : data.sublist(i * Cipher.bytesCountPerChunk);
-        cipherTextList.add(await _encrypt(dataToEncrypt));
-      }
-    } else {
-      return _encrypt(data);
-    }
-    return cipherTextList;
+  Future<CipherText> encrypt(Uint8List data, Uint8List? iv) async {
+    return _encrypt(data, iv);
+    // Uint8List dataToEncrypt;
+    //
+    // final CipherTextList cipherTextList = CipherTextList();
+    //
+    // if (data.length > Cipher.bytesCountPerChunk) {
+    //   final int chunkNb = (data.length / Cipher.bytesCountPerChunk).ceil();
+    //   for (var i = 0; i < chunkNb; i++) {
+    //     dataToEncrypt = i < (chunkNb - 1)
+    //         ? data.sublist(
+    //             i * Cipher.bytesCountPerChunk,
+    //             (i + 1) * Cipher.bytesCountPerChunk,
+    //           )
+    //         : data.sublist(i * Cipher.bytesCountPerChunk);
+    //     cipherTextList.add(await _encrypt(dataToEncrypt));
+    //   }
+    // } else {
+    //   return _encrypt(data);
+    // }
+    // return cipherTextList;
   }
 }

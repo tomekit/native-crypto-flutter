@@ -7,12 +7,14 @@
 // -----
 // Copyright (c) 2021
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:native_crypto/native_crypto.dart';
 import 'package:native_crypto_example/widgets/button.dart';
+import 'package:native_crypto/src/platform.dart';
 
 import '../session.dart';
 import '../utils.dart';
@@ -23,6 +25,8 @@ class KdfPage extends ConsumerWidget {
 
   final Output keyContent = Output();
   final Output keyStatus = Output();
+  final Output ivContent = Output();
+  final Output ivStatus = Output();
   final Output pbkdf2Status = Output();
   final Output hashStatus = Output(large: true);
 
@@ -40,6 +44,20 @@ class KdfPage extends ConsumerWidget {
       debugPrint("As hex :\n${sk.base16}");
     } catch (e) {
       keyStatus.print(e.toString());
+    }
+  }
+
+  Future<void> _generateIv(WidgetRef ref) async {
+    Session state = ref.read(sessionProvider.state).state;
+    try {
+      final iv = await platform.generateSecretKey(12 * 16);
+      state.setIv(iv!);
+      ivStatus.print(
+          "IV successfully generated.\nLength: ${state.secretKey.bytes.length} bytes");
+      ivContent.print(base64Encode(iv));
+      debugPrint("As base64 :\n${base64Encode(iv)}");
+    } catch (e) {
+      ivContent.print(e.toString());
     }
   }
 
@@ -87,6 +105,16 @@ class KdfPage extends ConsumerWidget {
               "Generate SecretKey",
             ),
             keyStatus,
+            const Align(
+              child: Text("IV"),
+              alignment: Alignment.centerLeft,
+            ),
+            ivContent,
+            Button(
+                  () => _generateIv(ref),
+              "Generate IV",
+            ),
+            ivStatus,
             TextField(
               controller: _pwdTextController,
               decoration: const InputDecoration(

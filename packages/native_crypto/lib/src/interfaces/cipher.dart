@@ -36,7 +36,7 @@ abstract class Cipher {
   ///
   /// Takes [Uint8List] data as parameter.
   /// Returns a [CipherText].
-  Future<CipherText> encrypt(Uint8List data);
+  Future<CipherText> encrypt(Uint8List data, Uint8List? iv);
 
   /// Decrypts cipher text.
   ///
