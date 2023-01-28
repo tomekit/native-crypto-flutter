@@ -82,6 +82,7 @@ public class SwiftNativeCryptoIosPlugin: NSObject, FlutterPlugin {
             
             let data : Data = (args["data"] as! FlutterStandardTypedData).data
             let key : Data = (args["key"] as! FlutterStandardTypedData).data
+            let iv : Data = (args["iv"] as! FlutterStandardTypedData).data
             let algorithm : String = args["algorithm"] as! String
             
             let cipherAlgorithm : CipherAlgorithm? = CipherAlgorithm.init(rawValue: algorithm)
@@ -92,7 +93,7 @@ public class SwiftNativeCryptoIosPlugin: NSObject, FlutterPlugin {
                 throw NativeCryptoError.cipherError
             }
             
-            return try cipher.encryptAsList(data: data, key: key)
+            return try cipher.encryptAsList(data: data, key: key, iv: iv)
         })
     }
     
@@ -136,7 +137,8 @@ public class SwiftNativeCryptoIosPlugin: NSObject, FlutterPlugin {
             }
             
             if (forEncryption) {
-                return FlutterStandardTypedData.init(bytes: try cipher.encrypt(data: data, key: key))
+                    throw NativeCryptoError.cipherError
+//                return FlutterStandardTypedData.init(bytes: try cipher.encrypt(data: data, key: key))
             } else {
                 return FlutterStandardTypedData.init(bytes: try cipher.decrypt(data: data, key: key))
             }

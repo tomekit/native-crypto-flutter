@@ -50,7 +50,7 @@ class KdfPage extends ConsumerWidget {
   Future<void> _generateIv(WidgetRef ref) async {
     Session state = ref.read(sessionProvider.state).state;
     try {
-      final iv = await platform.generateSecretKey(12 * 16);
+      final iv = await platform.generateSecretKey(12 * 8);
       state.setIv(iv!);
       ivStatus.print(
           "IV successfully generated.\nLength: ${state.secretKey.bytes.length} bytes");

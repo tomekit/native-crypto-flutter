@@ -9,8 +9,8 @@ import Foundation
 
 protocol Cipher {
     var algorithm: CipherAlgorithm { get }
-    func encrypt(data: Data, key: Data) throws -> Data
+    func encrypt(data: Data, key: Data, iv: Data) throws -> Data
     func decrypt(data: Data, key: Data) throws -> Data
-    func encryptAsList(data: Data, key: Data) throws -> [Data]
+    func encryptAsList(data: Data, key: Data, iv: Data) throws -> [Data]
     func decryptAsList(data: [Data], key: Data) throws-> Data
 }

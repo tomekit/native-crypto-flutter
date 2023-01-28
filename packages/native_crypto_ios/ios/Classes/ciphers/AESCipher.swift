@@ -13,9 +13,10 @@ class AESCipher : Cipher {
     
     /// Encrypts plaintext with key using AES GCM
     @available(iOS 13.0, *)
-    func encrypt(data: Data, key: Data) throws -> Data {
+    func encrypt(data: Data, key: Data, iv : Data) throws -> Data {
         let symmetricKey : SymmetricKey = SymmetricKey.init(data: key)
-        let encrypted : AES.GCM.SealedBox? = try? AES.GCM.seal(data, using: symmetricKey)
+        let nonce : AES.GCM.Nonce = try! AES.GCM.Nonce(data: iv)
+        let encrypted : AES.GCM.SealedBox? = try? AES.GCM.seal(data, using: symmetricKey, nonce: nonce)
         
         let encryptedData : Data? = encrypted?.combined
         if (encryptedData == nil) {
@@ -37,8 +38,8 @@ class AESCipher : Cipher {
         return decryptedData!
     }
     
-    func encryptAsList(data: Data, key: Data) throws -> [Data] {
-        let encryptedData = try encrypt(data: data, key: key)
+    func encryptAsList(data: Data, key: Data, iv: Data) throws -> [Data] {
+        let encryptedData = try encrypt(data: data, key: key, iv: iv)
         
         let iv = encryptedData.prefix(12)
         let data = encryptedData.suffix(from: 12)
