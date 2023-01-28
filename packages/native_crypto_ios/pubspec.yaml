@@ -21,4 +21,4 @@ flutter:
       ios:
         pluginClass: NativeCryptoIosPlugin
       macos:
-        pluginClass: NativeCryptoIosPlugin
+        pluginClass: SwiftNativeCryptoIosPlugin
