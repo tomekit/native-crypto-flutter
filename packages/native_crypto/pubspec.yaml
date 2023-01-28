@@ -50,3 +50,5 @@ flutter:
         default_package: native_crypto_android
       ios:
         default_package: native_crypto_ios
+      macos:
+        default_package: native_crypto_ios
